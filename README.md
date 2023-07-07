@@ -1,1 +1,7 @@
-# Sinatra-practices
+# Sinatora勉強用リポジトリ
+目的: Sinatraを用いて、簡単なメモアプリを作成すること
+
+# 環境
+ruby 3.2.2
+
+# 再現方法

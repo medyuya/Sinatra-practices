@@ -14,6 +14,10 @@ get '/memos/new' do
 end
 
 post '/memos/confirm' do
+  CSV.open("memos.csv", "a") do |csv|
+    csv << [CSV.read("memos.csv").count + 1, params[:title], params[:message]]
+  end
+  @memos = CSV.read("memos.csv")
   erb :top
 end
 

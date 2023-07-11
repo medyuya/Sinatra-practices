@@ -31,6 +31,15 @@ get '/memos/:id' do
   erb :show
 end
 
+get '/memos/:id/edit' do
+  CSV.foreach("memos.csv") do |record|
+    @memo = record if record[0] == params[:id]
+  end
+  p @memo
+
+  erb :edit
+end
+
 delete '/memos/:id' do
   @memos = CSV.read("memos.csv")
   @memos.reject! { |memo| memo[0] == params[:id] }

@@ -1,20 +1,25 @@
 require 'sinatra'
 require 'sinatra/reloader'
+require "csv"
+
+enable :method_override
 
 get '/' do
-  'hello'
-  'how  you?'
+  erb :top
 end
 
-get '/path/to' do
-  "this is [/path/to]"
+get '/memos/new' do
+  erb :new
 end
 
-get '/hello/*' do |name|
-  "hello #{name}. how are you?"
+post '/memos/confirm' do
+  erb :top
 end
 
-get '/erb_template_page' do
-  @ddd = 'ggg'
-  erb :erb_template_page
+get '/memos/:id' do
+  erb :show
+end
+
+delete '/memos/:id' do
+  erb :top
 end

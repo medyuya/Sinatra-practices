@@ -5,6 +5,7 @@ require "csv"
 enable :method_override
 
 get '/' do
+  @memos = CSV.read("memos.csv")
   erb :top
 end
 
@@ -17,6 +18,9 @@ post '/memos/confirm' do
 end
 
 get '/memos/:id' do
+  CSV.foreach("memos.csv") do |col|
+    @memo = col if col[0] == params[:id]
+  end
   erb :show
 end
 

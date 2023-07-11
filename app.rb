@@ -35,9 +35,23 @@ get '/memos/:id/edit' do
   CSV.foreach("memos.csv") do |record|
     @memo = record if record[0] == params[:id]
   end
-  p @memo
 
   erb :edit
+end
+
+patch '/memos/update' do
+  @memos = CSV.read("memos.csv")
+  @memos.each_with_index do |memo, i|
+    @memos[i] = [params[:id], params[:title], params[:message]] if memo[0] == params[:id]
+  end
+
+  CSV.open('memos.csv', 'w') do |csv|
+    @memos.each do |memo|
+      csv << memo
+    end
+  end
+
+  erb :top
 end
 
 delete '/memos/:id' do

@@ -3,8 +3,8 @@
   <input type="hidden" name="_method" value="PATCH">
   <input type="hidden" name="id" value="<%= @memo[0] %>">
   <div>タイトル：</div>
-  <div><input type="text" name="title" value="<%= @memo[1] %>"></div>
+  <div><input type="text" name="title" value="<%= @memo[1] %>" maxlength="15"></div>
   <div>メモ：</div>
-  <div><textarea name="message" rows="5"><%= @memo[2] %></textarea></div>
+  <div><textarea name="message" maxlength="50"><%= @memo[2] %></textarea></div>
   <div><input type="submit" value="変更"></div>
 </form>

@@ -46,7 +46,6 @@ patch '/memos/update' do
   @memos.each_with_index do |memo, i|
     @memos[i] = [params[:id], params[:title], params[:message]] if memo[0] == params[:id]
   end
-
   CSV.open('memos.csv', 'w') do |csv|
     @memos.each do |memo|
       csv << memo
@@ -59,7 +58,6 @@ end
 delete '/memos/:id' do
   @memos = CSV.read('memos.csv')
   @memos.reject! { |memo| memo[0] == params[:id] }
-
   CSV.open('memos.csv', 'w') do |csv|
     @memos.each do |memo|
       csv << memo

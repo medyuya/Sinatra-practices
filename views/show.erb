@@ -1,17 +1,14 @@
 <h1>メモアプリ</h1>
-
 <div>
   <%= @memo[1] %>
 </div>
 <div>
   <%= @memo[2] %>
 </div>
-
 <form method="GET" action="/memos/<%= @memo[0] %>/edit">
   <button type="submit">変更</button>
 </form>
-
 <form method="POST" action="/memos/<%= @memo[0] %>">
-  <input type="hidden" , name="_method", value="DELETE">
+  <input type="hidden" name="_method" value="DELETE">
   <button type="submit">削除</button>
 </form>

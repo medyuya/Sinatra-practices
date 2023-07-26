@@ -41,7 +41,7 @@ get '/memos/:id/edit' do
   erb :edit
 end
 
-patch '/memos/update' do
+patch '/memos' do
   @memos = CSV.read('memos.csv')
   @memos.each_with_index do |memo, i|
     @memos[i] = [params[:id], params[:title], params[:message]] if memo[0] == params[:id]

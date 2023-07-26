@@ -7,9 +7,13 @@ require 'csv'
 enable :method_override
 
 get '/' do
+  "Hello World"
+end
+
+get '/memos' do
   @memos = CSV.read('memos.csv')
 
-  erb :top
+  erb :index
 end
 
 get '/memos/new' do
@@ -22,7 +26,7 @@ post '/memos' do
   end
   @memos = CSV.read('memos.csv')
 
-  erb :top
+  erb :index
 end
 
 get '/memos/:id' do
@@ -52,7 +56,7 @@ patch '/memos' do
     end
   end
 
-  erb :top
+  erb :index
 end
 
 delete '/memos/:id' do
@@ -64,7 +68,7 @@ delete '/memos/:id' do
     end
   end
 
-  erb :top
+  erb :index
 end
 
 def create_next_id

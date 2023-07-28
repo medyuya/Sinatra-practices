@@ -22,7 +22,7 @@ end
 
 post '/memos' do
   CSV.open('memos.csv', 'a') do |csv|
-    csv << [create_next_id, params[:title], params[:message]]
+    csv << [create_next_id, escape_html(params[:title]), escape_html(params[:message])]
   end
   @memos = CSV.read('memos.csv')
 
@@ -48,7 +48,7 @@ end
 patch '/memos' do
   @memos = CSV.read('memos.csv')
   @memos.each_with_index do |memo, i|
-    @memos[i] = [params[:id], params[:title], params[:message]] if memo[0] == params[:id]
+    @memos[i] = [params[:id], escape_html(params[:title]), escape_html(params[:message])] if memo[0] == params[:id]
   end
   CSV.open('memos.csv', 'w') do |csv|
     @memos.each do |memo|
@@ -77,4 +77,8 @@ def create_next_id
 
   max_id = memos.map { |memo| memo[0].to_i }.max
   max_id + 1
+end
+
+def escape_html(text)
+  Rack::Utils.escape_html(text)
 end

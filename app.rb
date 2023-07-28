@@ -7,7 +7,7 @@ require 'csv'
 enable :method_override
 
 get '/' do
-  'Hello World'
+  redirect '/memos'
 end
 
 get '/memos' do

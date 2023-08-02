@@ -1,9 +1,9 @@
 <h1>メモアプリ</h1>
 <div>
-  <div>タイトル： <%= @memo[1] %></div>
+  <div>タイトル： <%= escape_html(@memo[1]) %></div>
 </div>
 <div>
-  <div>メモ： <%= @memo[2] %></div>
+  <div>メモ： <%= escape_html(@memo[2]) %></div>
 </div>
 <div>
   <form method="GET" action="/memos/<%= @memo[0] %>/edit">

@@ -21,8 +21,9 @@ get '/memos/new' do
 end
 
 post '/memos' do
+  p params
   CSV.open('memos.csv', 'a') do |csv|
-    csv << [create_next_id, params[:title], params[:message]]
+    csv << [create_next_id, cancel_new_line(params[:title]), cancel_new_line(params[:message])]
   end
   @memos = CSV.read('memos.csv')
 
@@ -48,7 +49,7 @@ end
 patch '/memos' do
   @memos = CSV.read('memos.csv')
   @memos.each_with_index do |memo, i|
-    @memos[i] = [params[:id], params[:title], params[:message]] if memo[0] == params[:id]
+    @memos[i] = [params[:id], cancel_new_line(params[:title]), cancel_new_line(params[:message])] if memo[0] == params[:id]
   end
   CSV.open('memos.csv', 'w') do |csv|
     @memos.each do |memo|
@@ -77,4 +78,8 @@ def create_next_id
 
   max_id = memos.map { |memo| memo[0].to_i }.max
   max_id + 1
+end
+
+def cancel_new_line(text)
+  text.gsub(/\r\n/, '')
 end

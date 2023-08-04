@@ -21,7 +21,6 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  p params
   CSV.open('memos.csv', 'a') do |csv|
     csv << [create_next_id, cancel_new_line(params[:title]), cancel_new_line(params[:message])]
   end

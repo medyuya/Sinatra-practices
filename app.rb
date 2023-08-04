@@ -26,7 +26,6 @@ post '/memos' do
     csv << [create_next_id, cancel_new_line(params[:title]), cancel_new_line(params[:message])]
   end
   @memos = CSV.read('memos.csv')
-
   erb :index
 end
 
@@ -81,5 +80,5 @@ def create_next_id
 end
 
 def cancel_new_line(text)
-  text.gsub(/\r\n/, '')
+  text.gsub(/\r\n/, "\n")
 end

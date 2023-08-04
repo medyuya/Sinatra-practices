@@ -24,6 +24,7 @@ post '/memos' do
   CSV.open('memos.csv', 'a') do |csv|
     csv << [create_next_id, cancel_new_line(params[:title]), cancel_new_line(params[:message])]
   end
+
   @memos = CSV.read('memos.csv')
   erb :index
 end

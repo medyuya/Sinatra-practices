@@ -1,0 +1,11 @@
+<h1>メモアプリ</h1>
+<ul>
+  <% @memos&.each do |memo| %>
+    <li>
+      <a href="/memos/<%= escape_html(memo[0]) %>"><%= escape_html(memo[1]) %></a>
+    </li>
+  <% end %>
+</ul>
+<form method="GET" action="/memos/new">
+  <button type="submit">追加</button>
+</form>

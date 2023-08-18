@@ -101,15 +101,3 @@ delete '/memos/:id' do
 
   erb :index
 end
-
-def create_next_id
-  memos = CSV.read('memos.csv')
-  return 1 if memos.empty?
-
-  max_id = memos.map { |memo| memo[0].to_i }.max
-  max_id + 1
-end
-
-def cancel_new_line(text)
-  text.gsub(/\r\n/, "\n")
-end

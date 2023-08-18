@@ -3,6 +3,7 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'csv'
+require 'pg'
 
 enable :method_override
 
@@ -11,7 +12,15 @@ get '/' do
 end
 
 get '/memos' do
-  @memos = CSV.read('memos.csv')
+  conn = PG.connect(
+    dbname: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    sslmode: 'disable'
+  )
+
+  @memos = conn.exec('SELECT * FROM users')
+  conn.close
 
   erb :index
 end
@@ -21,52 +30,74 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  CSV.open('memos.csv', 'a') do |csv|
-    csv << [create_next_id, cancel_new_line(params[:title]), cancel_new_line(params[:message])]
-  end
-  @memos = CSV.read('memos.csv')
+  conn = PG.connect(
+    dbname: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    sslmode: 'disable'
+  )
+
+  conn.exec_params('INSERT INTO users (title, memo) VALUES ($1, $2)', [params[:title], params[:message]])
+  @memos = conn.exec('SELECT * FROM users')
+  conn.close
 
   erb :index
 end
 
 get '/memos/:id' do
-  CSV.foreach('memos.csv') do |record|
-    @memo = record if record[0] == params[:id]
-  end
+  conn = PG.connect(
+    dbname: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    sslmode: 'disable'
+  )
+
+  @memo = conn.exec('SELECT * FROM users WHERE id = $1', [params[:id].to_i])
+  conn.close
 
   erb :show
 end
 
 get '/memos/:id/edit' do
-  CSV.foreach('memos.csv') do |record|
-    @memo = record if record[0] == params[:id]
-  end
+  conn = PG.connect(
+    dbname: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    sslmode: 'disable'
+  )
+
+  @memo = conn.exec('SELECT * FROM users WHERE id = $1', [params[:id].to_i])
+  conn.close
 
   erb :edit
 end
 
 patch '/memos' do
-  @memos = CSV.read('memos.csv')
-  @memos.each_with_index do |memo, i|
-    @memos[i] = [params[:id], cancel_new_line(params[:title]), cancel_new_line(params[:message])] if memo[0] == params[:id]
-  end
-  CSV.open('memos.csv', 'w') do |csv|
-    @memos.each do |memo|
-      csv << memo
-    end
-  end
+  conn = PG.connect(
+    dbname: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    sslmode: 'disable'
+  )
+
+  conn.exec_params('UPDATE users SET title = $1, memo = $2 WHERE id = $3', [params[:title], params[:message], params[:id].to_i])
+  @memos = conn.exec('SELECT * FROM users')
+  conn.close
 
   erb :index
 end
 
 delete '/memos/:id' do
-  @memos = CSV.read('memos.csv')
-  @memos.reject! { |memo| memo[0] == params[:id] }
-  CSV.open('memos.csv', 'w') do |csv|
-    @memos.each do |memo|
-      csv << memo
-    end
-  end
+  conn = PG.connect(
+    dbname: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    sslmode: 'disable'
+  )
+
+  conn.exec('DELETE FROM users WHERE id = $1', [params[:id].to_i])
+  @memos = conn.exec('SELECT * FROM users')
+  conn.close
 
   erb :index
 end

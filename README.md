@@ -26,7 +26,7 @@ rubocop
 ```
 bundle exec erblint --lint-all
 ```
-(7) テーブルの作成
+(6) テーブルの作成
 ```
 ruby table_definition.rb
 ```

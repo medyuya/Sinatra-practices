@@ -26,7 +26,7 @@ end
 
 get '/memos' do
   db_connection do |conn|
-    @memos = conn.exec('SELECT * FROM users')
+    @memos = conn.exec('SELECT * FROM memos')
   end
 
   erb :index
@@ -38,8 +38,8 @@ end
 
 post '/memos' do
   db_connection do |conn|
-    conn.exec_params('INSERT INTO users (title, memo) VALUES ($1, $2)', [params[:title], params[:message]])
-    @memos = conn.exec('SELECT * FROM users')
+    conn.exec_params('INSERT INTO memos (title, memo) VALUES ($1, $2)', [params[:title], params[:message]])
+    @memos = conn.exec('SELECT * FROM memos')
   end
 
   erb :index
@@ -47,7 +47,7 @@ end
 
 get '/memos/:id' do
   db_connection do |conn|
-    @memo = conn.exec('SELECT * FROM users WHERE id = $1', [params[:id].to_i])
+    @memo = conn.exec('SELECT * FROM memos WHERE id = $1', [params[:id].to_i])
   end
 
   erb :show
@@ -55,7 +55,7 @@ end
 
 get '/memos/:id/edit' do
   db_connection do |conn|
-    @memo = conn.exec('SELECT * FROM users WHERE id = $1', [params[:id].to_i])
+    @memo = conn.exec('SELECT * FROM memos WHERE id = $1', [params[:id].to_i])
   end
 
   erb :edit
@@ -63,8 +63,8 @@ end
 
 patch '/memos/:id' do
   db_connection do |conn|
-    conn.exec_params('UPDATE users SET title = $1, memo = $2 WHERE id = $3', [params[:title], params[:message], params[:id].to_i])
-    @memos = conn.exec('SELECT * FROM users')
+    conn.exec_params('UPDATE memos SET title = $1, memo = $2 WHERE id = $3', [params[:title], params[:message], params[:id].to_i])
+    @memos = conn.exec('SELECT * FROM memos')
   end
 
   erb :index
@@ -72,8 +72,8 @@ end
 
 delete '/memos/:id' do
   db_connection do |conn|
-    conn.exec('DELETE FROM users WHERE id = $1', [params[:id].to_i])
-    @memos = conn.exec('SELECT * FROM users')
+    conn.exec('DELETE FROM memos WHERE id = $1', [params[:id].to_i])
+    @memos = conn.exec('SELECT * FROM memos')
   end
 
   erb :index

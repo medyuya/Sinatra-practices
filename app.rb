@@ -26,7 +26,7 @@ get '/' do
 end
 
 get '/memos' do
-  @memos = @conn.exec('SELECT * FROM memos')
+  @memos = @conn.exec('SELECT * FROM memos ORDER BY id')
 
   erb :index
 end
@@ -37,7 +37,7 @@ end
 
 post '/memos' do
   @conn.exec_params('INSERT INTO memos (title, memo) VALUES ($1, $2)', [params[:title], params[:message]])
-  @memos = @conn.exec('SELECT * FROM memos')
+  @memos = @conn.exec('SELECT * FROM memos ORDER BY id')
 
   erb :index
 end
@@ -56,14 +56,14 @@ end
 
 patch '/memos/:id' do
   @conn.exec_params('UPDATE memos SET title = $1, memo = $2 WHERE id = $3', [params[:title], params[:message], params[:id].to_i])
-  @memos = @conn.exec('SELECT * FROM memos')
+  @memos = @conn.exec('SELECT * FROM memos ORDER BY id')
 
   erb :index
 end
 
 delete '/memos/:id' do
   @conn.exec('DELETE FROM memos WHERE id = $1', [params[:id].to_i])
-  @memos = @conn.exec('SELECT * FROM memos')
+  @memos = @conn.exec('SELECT * FROM memos ORDER BY id')
 
   erb :index
 end

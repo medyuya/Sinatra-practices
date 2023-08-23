@@ -61,7 +61,7 @@ get '/memos/:id/edit' do
   erb :edit
 end
 
-patch '/memos' do
+patch '/memos/:id' do
   db_connection do |conn|
     conn.exec_params('UPDATE users SET title = $1, memo = $2 WHERE id = $3', [params[:title], params[:message], params[:id].to_i])
     @memos = conn.exec('SELECT * FROM users')

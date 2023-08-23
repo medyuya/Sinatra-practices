@@ -1,7 +1,6 @@
 <h1>メモアプリ</h1>
-<form method="POST" action="/memos">
+<form method="POST" action="/memos/<%= @memo[0]['id'] %>">
   <input type="hidden" name="_method" value="PATCH">
-  <input type="hidden" name="id" value="<%= @memo[0]['id'] %>">
   <div>タイトル：</div>
   <div><input type="text" name="title" value="<%= escape_html(@memo[0]['title']) %>" maxlength="15"></div>
   <div>メモ：</div>

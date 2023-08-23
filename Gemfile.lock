@@ -22,6 +22,7 @@ GEM
       smart_properties
     builder (3.2.4)
     concurrent-ruby (1.2.2)
+    connection_pool (2.4.1)
     crass (1.0.6)
     erb_lint (0.4.0)
       activesupport
@@ -108,6 +109,7 @@ PLATFORMS
   arm64-darwin-22
 
 DEPENDENCIES
+  connection_pool
   erb_lint
   pg
   puma

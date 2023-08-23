@@ -4,18 +4,19 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'csv'
 require 'pg'
+require 'connection_pool'
 
-def db_connection
-  conn = PG.connect(
+DB_POOL = ConnectionPool.new(size: 5, timeout: 5) do
+  PG.connect(
     dbname: 'postgres',
     host: 'localhost',
     port: 5432,
     sslmode: 'disable'
   )
+end
 
-  yield(conn) if block_given?
-
-  conn.close
+before do
+  @conn = DB_POOL.with { |conn| conn }
 end
 
 enable :method_override
@@ -25,9 +26,7 @@ get '/' do
 end
 
 get '/memos' do
-  db_connection do |conn|
-    @memos = conn.exec('SELECT * FROM memos')
-  end
+  @memos = @conn.exec('SELECT * FROM memos')
 
   erb :index
 end
@@ -37,44 +36,34 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  db_connection do |conn|
-    conn.exec_params('INSERT INTO memos (title, memo) VALUES ($1, $2)', [params[:title], params[:message]])
-    @memos = conn.exec('SELECT * FROM memos')
-  end
+  @conn.exec_params('INSERT INTO memos (title, memo) VALUES ($1, $2)', [params[:title], params[:message]])
+  @memos = @conn.exec('SELECT * FROM memos')
 
   erb :index
 end
 
 get '/memos/:id' do
-  db_connection do |conn|
-    @memo = conn.exec('SELECT * FROM memos WHERE id = $1', [params[:id].to_i])
-  end
+  @memo = @conn.exec('SELECT * FROM memos WHERE id = $1', [params[:id].to_i])
 
   erb :show
 end
 
 get '/memos/:id/edit' do
-  db_connection do |conn|
-    @memo = conn.exec('SELECT * FROM memos WHERE id = $1', [params[:id].to_i])
-  end
+  @memo = @conn.exec('SELECT * FROM memos WHERE id = $1', [params[:id].to_i])
 
   erb :edit
 end
 
 patch '/memos/:id' do
-  db_connection do |conn|
-    conn.exec_params('UPDATE memos SET title = $1, memo = $2 WHERE id = $3', [params[:title], params[:message], params[:id].to_i])
-    @memos = conn.exec('SELECT * FROM memos')
-  end
+  @conn.exec_params('UPDATE memos SET title = $1, memo = $2 WHERE id = $3', [params[:title], params[:message], params[:id].to_i])
+  @memos = @conn.exec('SELECT * FROM memos')
 
   erb :index
 end
 
 delete '/memos/:id' do
-  db_connection do |conn|
-    conn.exec('DELETE FROM memos WHERE id = $1', [params[:id].to_i])
-    @memos = conn.exec('SELECT * FROM memos')
-  end
+  @conn.exec('DELETE FROM memos WHERE id = $1', [params[:id].to_i])
+  @memos = @conn.exec('SELECT * FROM memos')
 
   erb :index
 end

@@ -12,5 +12,4 @@ conn = PG.connect(
 # テーブルを作成
 conn.exec('CREATE TABLE IF NOT EXISTS memos (id serial PRIMARY KEY, title varchar, memo varchar)')
 
-# conn.exec('DROP TABLE IF EXISTS memos')
 conn.close

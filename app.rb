@@ -43,13 +43,13 @@ post '/memos' do
 end
 
 get '/memos/:id' do
-  @memo = @conn.exec('SELECT * FROM memos WHERE id = $1', [params[:id].to_i])
+  @memo = @conn.exec('SELECT * FROM memos WHERE id = $1', [params[:id].to_i]).first
 
   erb :show
 end
 
 get '/memos/:id/edit' do
-  @memo = @conn.exec('SELECT * FROM memos WHERE id = $1', [params[:id].to_i])
+  @memo = @conn.exec('SELECT * FROM memos WHERE id = $1', [params[:id].to_i]).first
 
   erb :edit
 end

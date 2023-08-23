@@ -1,15 +1,15 @@
 <h1>メモアプリ</h1>
 <div>
-  <div>タイトル： <%= escape_html(@memo[0]['title']) %></div>
+  <div>タイトル： <%= escape_html(@memo['title']) %></div>
 </div>
 <div>
-  <div>メモ： <%= escape_html(@memo[0]['memo']) %></div>
+  <div>メモ： <%= escape_html(@memo['memo']) %></div>
 </div>
 <div>
-  <form method="GET" action="/memos/<%= @memo[0]['id'] %>/edit">
+  <form method="GET" action="/memos/<%= @memo['id'] %>/edit">
     <button type="submit">変更</button>
   </form>
-  <form method="POST" action="/memos/<%= @memo[0]['id'] %>">
+  <form method="POST" action="/memos/<%= @memo['id'] %>">
     <input type="hidden" name="_method" value="DELETE">
     <button type="submit">削除</button>
   </form>

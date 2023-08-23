@@ -2,6 +2,7 @@
 
 source 'https://rubygems.org'
 
+gem 'connection_pool'
 gem 'erb_lint'
 gem 'pg'
 gem 'puma'
@@ -9,4 +10,3 @@ gem 'rubocop'
 gem 'rubocop-fjord'
 gem 'sinatra'
 gem 'sinatra-contrib'
-gem 'connection_pool'

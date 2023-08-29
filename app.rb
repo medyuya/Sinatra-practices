@@ -8,10 +8,10 @@ require 'pg'
 enable :method_override
 
 class DatabaseConnector
-  @@conn = nil
+  @connection = nil
 
   def self.connection
-    @@conn ||= PG.connect(
+    @connection ||= PG.connect(
       dbname: 'postgres',
       host: 'localhost',
       port: 5432,

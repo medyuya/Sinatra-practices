@@ -37,7 +37,7 @@ end
 
 post '/memos' do
   redirect '/memos' if params[:title].nil? || params[:title].strip.empty?
-  @conn.exec_params('INSERT INTO memos (title, memo) VALUES ($1, $2)', [params[:title], params[:message]])
+  @conn.exec_params('INSERT INTO memos (title, memo) VALUES ($1, $2)', [params[:title], params[:memo]])
 
   redirect '/memos'
 end
@@ -56,7 +56,7 @@ end
 
 patch '/memos/:id' do
   redirect '/memos' if params[:title].nil? || params[:title].strip.empty?
-  @conn.exec_params('UPDATE memos SET title = $1, memo = $2 WHERE id = $3', [params[:title], params[:message], params[:id].to_i])
+  @conn.exec_params('UPDATE memos SET title = $1, memo = $2 WHERE id = $3', [params[:title], params[:memo], params[:id].to_i])
 
   redirect '/memos'
 end

@@ -4,6 +4,6 @@
   <div>タイトル：</div>
   <div><input type="text" name="title" value="<%= escape_html(@memo['title']) %>" maxlength="50"></div>
   <div>メモ：</div>
-  <div><textarea name="message" maxlength="200"><%= escape_html(@memo['memo']) %></textarea></div>
+  <div><textarea name="memo" maxlength="200"><%= escape_html(@memo['memo']) %></textarea></div>
   <div><input type="submit" value="変更"></div>
 </form>

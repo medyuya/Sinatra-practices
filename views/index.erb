@@ -1,6 +1,6 @@
 <h1>メモアプリ</h1>
 <ul>
-  <% @memos&.each do |memo| %>
+  <% @memos.each do |memo| %>
     <li>
       <a href="/memos/<%= memo['id'] %>"><%= escape_html(memo['title']) %></a>
     </li>

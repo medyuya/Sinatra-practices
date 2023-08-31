@@ -5,8 +5,6 @@ require 'sinatra/reloader'
 require 'csv'
 require 'pg'
 
-enable :method_override
-
 class DatabaseConnector
   def self.connection
     @connection ||= PG.connect(

@@ -8,8 +8,6 @@ require 'pg'
 enable :method_override
 
 class DatabaseConnector
-  @connection = nil
-
   def self.connection
     @connection ||= PG.connect(
       dbname: 'postgres',

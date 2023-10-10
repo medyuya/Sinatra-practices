@@ -22,6 +22,7 @@ GEM
       smart_properties
     builder (3.2.4)
     concurrent-ruby (1.2.2)
+    connection_pool (2.4.1)
     crass (1.0.6)
     erb_lint (0.4.0)
       activesupport
@@ -49,6 +50,7 @@ GEM
     parser (3.2.2.3)
       ast (~> 2.4.1)
       racc
+    pg (1.5.3)
     puma (6.3.0)
       nio4r (~> 2.0)
     racc (1.7.1)
@@ -107,7 +109,9 @@ PLATFORMS
   arm64-darwin-22
 
 DEPENDENCIES
+  connection_pool
   erb_lint
+  pg
   puma
   rubocop
   rubocop-fjord

@@ -3,15 +3,31 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'csv'
+require 'pg'
 
-enable :method_override
+class DatabaseConnector
+  def self.connection
+    @connection ||= PG.connect(
+      dbname: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      sslmode: 'disable'
+    )
+  end
+end
+
+helpers do
+  def db_connection
+    DatabaseConnector.connection
+  end
+end
 
 get '/' do
   redirect '/memos'
 end
 
 get '/memos' do
-  @memos = CSV.read('memos.csv')
+  @memos = db_connection.exec('SELECT * FROM memos ORDER BY id')
 
   erb :index
 end
@@ -21,64 +37,33 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  CSV.open('memos.csv', 'a') do |csv|
-    csv << [create_next_id, cancel_new_line(params[:title]), cancel_new_line(params[:message])]
-  end
-  @memos = CSV.read('memos.csv')
+  redirect '/memos' if params[:title].strip.empty?
+  db_connection.exec_params('INSERT INTO memos (title, memo) VALUES ($1, $2)', [params[:title], params[:memo]])
 
-  erb :index
+  redirect '/memos'
 end
 
 get '/memos/:id' do
-  CSV.foreach('memos.csv') do |record|
-    @memo = record if record[0] == params[:id]
-  end
+  @memo = db_connection.exec('SELECT * FROM memos WHERE id = $1', [params[:id].to_i]).first
 
   erb :show
 end
 
 get '/memos/:id/edit' do
-  CSV.foreach('memos.csv') do |record|
-    @memo = record if record[0] == params[:id]
-  end
+  @memo = db_connection.exec('SELECT * FROM memos WHERE id = $1', [params[:id].to_i]).first
 
   erb :edit
 end
 
-patch '/memos' do
-  @memos = CSV.read('memos.csv')
-  @memos.each_with_index do |memo, i|
-    @memos[i] = [params[:id], cancel_new_line(params[:title]), cancel_new_line(params[:message])] if memo[0] == params[:id]
-  end
-  CSV.open('memos.csv', 'w') do |csv|
-    @memos.each do |memo|
-      csv << memo
-    end
-  end
+patch '/memos/:id' do
+  redirect '/memos' if params[:title].strip.empty?
+  db_connection.exec_params('UPDATE memos SET title = $1, memo = $2 WHERE id = $3', [params[:title], params[:memo], params[:id].to_i])
 
-  erb :index
+  redirect '/memos'
 end
 
 delete '/memos/:id' do
-  @memos = CSV.read('memos.csv')
-  @memos.reject! { |memo| memo[0] == params[:id] }
-  CSV.open('memos.csv', 'w') do |csv|
-    @memos.each do |memo|
-      csv << memo
-    end
-  end
+  db_connection.exec('DELETE FROM memos WHERE id = $1', [params[:id].to_i])
 
-  erb :index
-end
-
-def create_next_id
-  memos = CSV.read('memos.csv')
-  return 1 if memos.empty?
-
-  max_id = memos.map { |memo| memo[0].to_i }.max
-  max_id + 1
-end
-
-def cancel_new_line(text)
-  text.gsub(/\r\n/, "\n")
+  redirect '/memos'
 end

@@ -26,7 +26,11 @@ rubocop
 ```
 bundle exec erblint --lint-all
 ```
-(6) ローカルでアプリを起動
+(6) テーブルの作成
+```
+ruby table_definition.rb
+```
+(7) ローカルでアプリを起動
 ```
 bundle exec ruby app.rb
 ```
